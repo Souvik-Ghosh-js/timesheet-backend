@@ -24,6 +24,23 @@ async function add_project(req, res) {
     }
 }
 
+
+async function get_all_projects(req, res) {
+    try {
+        // Query the database to get all projects
+        const projects = await Project.find();
+
+        // Return the projects in the response
+        res.status(200).json({ projects });
+    } catch (error) {
+        console.error('Error fetching projects:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
 module.exports = {
-    add_project
+    add_project,
+    get_all_projects
+
 };

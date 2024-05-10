@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+
 const { generateToken } = require('../passportConfig');
 const User = require('../models/userModel');
 

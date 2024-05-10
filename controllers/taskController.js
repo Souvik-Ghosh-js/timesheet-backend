@@ -31,10 +31,7 @@ async function add_task(req, res) {
         // Save the new task to the database
         await newTask.save();
 
-        // Update project's member_id or team_id based on AssignedTo
-     
 
-      
 
         // Find the assigned users and teams
         const assignedUsers = await User.find({ _id: { $in: assignedTo } });
