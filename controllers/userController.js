@@ -48,21 +48,22 @@ async function login(req, res) {
 
     // Compare passwords
     // const isPasswordValid = await bcrypt.compare(password, user.password);
+  
     if (password === user.password){
-      isPasswordValid = true; 
+      const token = generateToken(user.id); // Pass user ID to generate token
+
+      // Send token along with user information
+      res.status(200).json({ message: 'Login successful', token: token, user: user });
     }
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+    else {
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
     // Generate JWT token
-    const token = generateToken(user.id); // Pass user ID to generate token
-
-    // Send token along with user information
-    res.status(200).json({ message: 'Login successful', token: token, user: user });
+   
   } catch (error) {
     console.error('Error logging in:', error);
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 
