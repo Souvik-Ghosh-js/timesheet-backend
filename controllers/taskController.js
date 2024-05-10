@@ -6,11 +6,15 @@ const Team = require('../models/teamModel');
 // Controller function to add a new task
 async function add_task(req, res) {
     try {
-        const { task_name, task_desc, priority, status, assignedTo, dueDate, project_id } = req.body;
+        const { task_name, task_desc, priority, status, assignedTo, dueDate, project_name  } = req.body;
 
         // Get the current logged in user (assigned by)
         const assignedBy = req.user._id;
+        const project = await Project.findOne({ project_name });
 
+        if (!project) {
+            return res.status(404).json({ message: 'Project not found' });
+        }
         // Create a new task
         const newTask = new Task({
             task_name,
@@ -21,18 +25,16 @@ async function add_task(req, res) {
             assignedTo,
             dueDate,
             overdueTime: null, // Set OverdueTime to null for now
-            project_id
+            project_id: project._id,
         });
 
         // Save the new task to the database
         await newTask.save();
 
         // Update project's member_id or team_id based on AssignedTo
-        const project = await Project.findById(project_id);
+     
 
-        if (!project) {
-            return res.status(404).json({ message: 'Project not found' });
-        }
+      
 
         // Find the assigned users and teams
         const assignedUsers = await User.find({ _id: { $in: assignedTo } });
