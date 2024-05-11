@@ -28,6 +28,23 @@ async function add_team(req, res) {
     }
 }
 
+
+async function show_teams(req, res) {
+    try {
+        // Fetch all teams from the database
+        const teams = await Team.find();
+
+        res.status(200).json({ teams });
+    } catch (error) {
+        console.error('Error fetching teams:', error);
+        res.status(500).json({ message: 'Internal server error', error: error });
+    }
+}
+
+
+
+
 module.exports = {
-    add_team
+    add_team,
+    show_teams,
 };

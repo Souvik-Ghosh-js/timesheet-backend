@@ -29,7 +29,7 @@ async function get_all_projects(req, res) {
     try {
         // Query the database to get all projects
         const projects = await Project.find();
-
+        
         // Return the projects in the response
         res.status(200).json({ projects });
     } catch (error) {
