@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const getClient = require('./connection');
+const cors = require('cors');
 
 // Import route files
 const taskRoutes = require('./routes/taskRoutes');
@@ -12,6 +13,7 @@ const teamRoutes = require('./routes/teamRoutes');
 
 const app = express();
 
+app.use(cors());
 
 
 // Configure middleware
