@@ -55,6 +55,22 @@ async function add_task(req, res) {
     }
 }
 
+
+async function get_tasks(req, res) {
+    try {
+        const { project_id } = req.params; // Assuming project_id is passed in the request parameters
+
+        // Find tasks based on project_id
+        const tasks = await Task.find({ project_id });
+
+        res.status(200).json({ message: 'Tasks retrieved successfully', tasks });
+    } catch (error) {
+        console.error('Error getting tasks by project_id:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
 module.exports = {
-    add_task
+    add_task,
+    get_tasks,
 };
