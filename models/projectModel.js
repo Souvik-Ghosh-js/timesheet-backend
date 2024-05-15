@@ -9,10 +9,10 @@ const projectSchema = new mongoose.Schema({
     type: String,
     ref: 'User'
   }],
-  team_id: {
-    type: mongoose.Schema.Types.ObjectId,
+  team_id: [{
+    type: String,
     ref: 'Teams'
-  },
+  }],
   
 });
 
