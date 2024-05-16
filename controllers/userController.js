@@ -69,24 +69,33 @@ async function login(req, res) {
 
 async function getUserList(req, res) {
   try {
-      // Fetch all users from the database
-      const users = await User.find({}, '_id name');
+    let filter = {};
+    const { userId } = req.params;
+    if (userId) {
+      console.log(userId);
+      filter = { _id: userId };
+    }
+    
+    // Fetch users from the database based on the filter
+    const users = await User.find(filter);
 
-      // Create a list of user IDs with names
-      const userList = users.map(user => ({
-          user_id: user._id,
-          name: user.name
-      }));
+    // If no users found, return an empty array
+    if (!users || users.length === 0) {
+      return res.status(404).json({ message: 'No users found' });
+    }
 
-      res.status(200).json(userList);
+    // Return the list of users
+    res.status(200).json(users);
   } catch (error) {
-      console.error('Error fetching user list:', error);
-      res.status(500).json({ message: 'Internal server error' });
+    console.error('Error fetching user list:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
+
 
 module.exports = {
   register,
   login,
-  getUserList
+  getUserList,
+
 };
