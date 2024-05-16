@@ -6,7 +6,7 @@ const { restrictToAdmin } = require('../passportConfig');
 
 // Route to add a new project
 router.post('/add', restrictToAdmin ,add_project);
-router.get('/get', get_all_projects )
+router.get('/get/:projectId?', get_all_projects )
 
 
 module.exports = router;

@@ -28,8 +28,15 @@ async function add_project(req, res) {
 async function get_all_projects(req, res) {
     try {
         // Query the database to get all projects
-        const projects = await Project.find();
-        
+        let filter = {};
+        const { projectId } = req.params;
+        if (projectId) {
+            filter = { _id: projectId };
+          }
+        const projects = await Project.find(filter);
+        if (!projects || projects.length === 0) {
+            return res.status(404).json({ message: 'No users found' });
+          }
         // Return the projects in the response
         res.status(200).json({ projects });
     } catch (error) {
