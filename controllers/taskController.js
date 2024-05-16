@@ -70,7 +70,30 @@ async function get_tasks(req, res) {
     }
 }
 
+
+async function delete_task(req, res) {
+    try {
+        const { taskId } = req.params;
+
+        // Find the task by ID
+        const task = await Task.findById(taskId);
+
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        // Delete the task
+        await task.remove();
+
+        res.status(200).json({ message: 'Task deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting task:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
 module.exports = {
     add_task,
     get_tasks,
+    delete_task,
 };
