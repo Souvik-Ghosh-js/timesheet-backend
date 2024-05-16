@@ -82,8 +82,13 @@ async function delete_task(req, res) {
             return res.status(404).json({ message: 'Task not found' });
         }
 
+        // Check if the retrieved task is an instance of the Task model
+        if (!(task instanceof Task)) {
+            return res.status(500).json({ message: 'Invalid task data' });
+        }
+
         // Delete the task
-        await task.remove();
+        await task.deleteOne();
 
         res.status(200).json({ message: 'Task deleted successfully' });
     } catch (error) {
@@ -91,7 +96,6 @@ async function delete_task(req, res) {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
-
 module.exports = {
     add_task,
     get_tasks,
