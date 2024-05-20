@@ -19,7 +19,6 @@ const taskSchema = new mongoose.Schema({
   dueDate: Date,
   overdueTime: {String}
   ,
-  priority : {String},
   project_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Project'

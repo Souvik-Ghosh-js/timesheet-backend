@@ -96,8 +96,51 @@ async function delete_task(req, res) {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+async function edit_task(req, res) {
+    try {
+        const { taskId } = req.params;
+        const { task_name, task_desc, priority, status, assignedTo, dueDate } = req.body;
+        // Find the task by ID
+        const task = await Task.findById(taskId);
+
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        // Update task properties if they exist in the request body
+        if (task_name) {
+            task.task_name = task_name;
+        }
+        if (task_desc) {
+            task.task_desc = task_desc;
+        }
+        if (priority) {
+            task.priority = priority;
+        }
+        if (status) {
+            task.status = status;
+        }
+        if (assignedTo) {
+            task.assignedTo = assignedTo;
+        }
+        if (dueDate) {
+            task.dueDate = dueDate;
+        }
+
+        // Save the updated task to the database
+        await task.save();
+
+        res.status(200).json({ message: 'Task updated successfully', task });
+    } catch (error) {
+        console.error('Error editing task:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
 module.exports = {
     add_task,
     get_tasks,
     delete_task,
+    edit_task,
 };
