@@ -7,5 +7,5 @@ const { authenticate } = require('../passportConfig');
 router.post('/add', authenticate, add_task);
 router.get('/get/:project_id', authenticate, get_tasks);
 router.get('/delete/:taskId' , delete_task)
-router.post('/edit/:taskId' , edit_task)
+router.post('/edit/:taskId' ,authenticate, edit_task)
 module.exports = router;

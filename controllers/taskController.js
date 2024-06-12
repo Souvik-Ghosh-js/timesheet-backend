@@ -2,7 +2,7 @@ const Task = require('../models/taskModel');
 const Project = require('../models/projectModel');
 const User = require('../models/userModel');
 const Team = require('../models/teamModel');
-
+const updateGoogleSheet = require('../utils/updateGoogleSheet');
 // Controller function to add a new task
 async function add_task(req, res) {
     try {
@@ -101,6 +101,7 @@ async function edit_task(req, res) {
     try {
         const { taskId } = req.params;
         const { task_name, task_desc, priority, status, assignedTo, dueDate } = req.body;
+
         // Find the task by ID
         const task = await Task.findById(taskId);
 
@@ -108,6 +109,8 @@ async function edit_task(req, res) {
             return res.status(404).json({ message: 'Task not found' });
         }
 
+        const previousStatus = task.status;
+        console.log("statys" ,previousStatus);
         // Update task properties if they exist in the request body
         if (task_name) {
             task.task_name = task_name;
@@ -131,12 +134,19 @@ async function edit_task(req, res) {
         // Save the updated task to the database
         await task.save();
 
+        // Log the completed task if the status is changed to "Done"
+        if (previousStatus !== 'Done' && task.status === 'Done') {
+
+            await updateGoogleSheet(task, req.user);
+        }
+
         res.status(200).json({ message: 'Task updated successfully', task });
     } catch (error) {
         console.error('Error editing task:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
 
 module.exports = {
     add_task,
